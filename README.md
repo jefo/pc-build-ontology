@@ -118,6 +118,23 @@ LLM интерпретирует запрос, предлагает кандид
 
 ## Демо
 
+Статическая демо-страница: [`docs/index.html`](docs/index.html). Открывается локально без сборки. Если включить GitHub Pages для папки `docs/`, она будет доступна по адресу `https://jefo.github.io/pc-build-ontology/`.
+
+**Валидная сборка — `PASS_WITH_WARNINGS`**
+
+[![Демо: валидная сборка киберспорт 240 Hz](docs/screenshots/demo-valid.png)](docs/screenshots/demo-valid.png)
+
+**Ловушка с маркетплейса — `FAIL`**
+
+[![Демо: сборка Xeon + RTX 4090 заблокирована](docs/screenshots/demo-trap.png)](docs/screenshots/demo-trap.png)
+
+Открыть локально:
+
+```bash
+python3 -m http.server 8000 -d docs
+# http://localhost:8000/?scenario=xeon-rtx4090-trap
+```
+
 ### Валидная сборка: киберспорт 1080p / 240Hz
 
 ```bash
@@ -189,6 +206,9 @@ python -m engine.run_all < examples/xeon-rtx4090-trap/build.json
 
 # self-test контрактов
 python engine/test_pass_contract.py
+
+# пересобрать данные демо после изменения примеров
+python tools/build_demo_data.py
 ```
 
 Если установлен `make`, есть короткие цели:
@@ -263,8 +283,15 @@ examples/
   xeon-rtx4090-trap/   сборка с блокирующими ошибками
   kb/                  демо-карточки компонентов
 docs/
+  index.html           статическое демо
+  demo.css / demo.js   интерфейс демо
+  data.js              данные демо (генерируется из examples/)
+  screenshots/         скриншоты валидной и проваленной сборки
   ARCHITECTURE.md      слои, контракты, формат входа
   WALKTHROUGH.md       разбор двух примеров
+tools/
+  build_demo_data.py   examples/ → docs/data.js
+  screenshot_demo.py   docs/ → docs/screenshots/
 ```
 
 ---

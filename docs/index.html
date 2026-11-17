@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PCBO — демо валидатора сборок</title>
+<meta name="description" content="Детерминированная проверка PC-сборок: геометрия, питание, тепло, профили компонентов и бюджет.">
+<link rel="stylesheet" href="demo.css">
+</head>
+<body>
+<div class="bg-grid" aria-hidden="true"></div>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark">P</span>
+    <span class="brand-name">PCBO</span>
+    <span class="brand-sub">PC Build Ontology</span>
+  </div>
+  <div class="topbar-meta">
+    <span class="dot"></span>
+    <span>local demo</span>
+    <span class="sep">/</span>
+    <span>deterministic gates</span>
+  </div>
+</header>
+
+<main class="page">
+  <section class="hero">
+    <div class="eyebrow" id="case-id">CASE 001</div>
+    <h1>Сборка — это решение.<br><span>Проверь его до покупки.</span></h1>
+    <p class="lede" id="tagline"></p>
+    <div class="tabs" id="tabs" role="tablist" aria-label="Сценарии"></div>
+  </section>
+
+  <section class="verdict" id="verdict" aria-live="polite">
+    <div class="verdict-main">
+      <div class="verdict-label">L5 GATE / ИТОГОВЫЙ ВЕРДИКТ</div>
+      <div class="verdict-status" id="verdict-status">—</div>
+      <div class="verdict-summary" id="verdict-summary"></div>
+    </div>
+    <div class="verdict-side">
+      <div class="verdict-action" id="verdict-action"></div>
+      <div class="verdict-note" id="verdict-note"></div>
+    </div>
+  </section>
+
+  <section class="tiles" id="tiles"></section>
+
+  <section class="columns">
+    <div class="panel checks-panel">
+      <div class="panel-head">
+        <h2>14 проверок</h2>
+        <span class="panel-meta">engine.run_all()</span>
+      </div>
+      <div class="checks" id="checks"></div>
+    </div>
+
+    <div class="stack">
+      <div class="panel config-panel">
+        <div class="panel-head">
+          <h2>Конфигурация</h2>
+          <span class="panel-meta" id="total"></span>
+        </div>
+        <table class="components">
+          <thead><tr><th>Компонент</th><th>Модель</th><th>Профиль / запас</th></tr></thead>
+          <tbody id="components"></tbody>
+        </table>
+        <p class="config-note" id="config-note"></p>
+      </div>
+
+      <div class="panel findings">
+        <div class="panel-head">
+          <h2>Что остановило или насторожило</h2>
+          <span class="panel-meta">l5_validation</span>
+        </div>
+        <div class="findings-grid">
+          <div>
+            <div class="findings-title fail">Блокирующие</div>
+            <ul id="blockers"></ul>
+          </div>
+          <div>
+            <div class="findings-title warn">Предупреждения</div>
+            <ul id="warnings"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <span>PCBO · PC Build Ontology</span>
+    <span class="footer-sep">/</span>
+    <a href="https://github.com/jefo/pc-build-ontology">github.com/jefo/pc-build-ontology</a>
+    <span class="footer-sep">/</span>
+    <span>примеры, не рекомендация к покупке</span>
+  </footer>
+</main>
+
+<script src="data.js"></script>
+<script src="demo.js"></script>
+</body>
+</html>
