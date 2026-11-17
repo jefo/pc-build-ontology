@@ -1,0 +1,101 @@
+# PCBOv2: Intent-based bottleneck floors.
+# Используется Skill 15 (validate_component_floor.py).
+# При изменении требований игр/моделей/нагрузок — править здесь.
+
+meta:
+  schema_version: "1.0"
+  description: "Минимальные полы для НЕ-бутылочных компонентов по каждому интенту."
+  last_updated: "2026-06-04"
+
+intents:
+
+  # ═══════════════════ AAA GAMING ═══════════════════
+  aaa_gaming_base:
+    domain: "gaming"
+    bottleneck: "gpu"
+    bottleneck_reason: "На всех разрешениях GPU — первичный constraint. CPU вторичен."
+    floors:
+      cpu_min_cores:
+        "1080p": 6
+        "1440p": 6
+        "4K": 4
+        note: "4 ядра минимум для 4K — GPU не даст больше кадров."
+      cpu_min_arch: "zen3_or_alder_lake"
+      ram_min_capacity_gb: 32
+      ram_min_speed: "ddr5_5200"
+      storage_min_capacity_gb: 1000
+
+  # ═══════════════════ ESPORTS ═══════════════════
+  esports_competitive_360hz:
+    domain: "gaming"
+    bottleneck: "cpu"
+    bottleneck_reason: "CPU должен гарантировать 1% Low > 360 fps. GPU на low-настройках вторичен."
+    floors:
+      gpu_min_fp32_tflops: 15.0    # RTX 4060 ≈ 15 TFLOPS — достаточно
+      gpu_min_vram_gb: 8
+      cpu_min_cache_mb: 96         # 3D V-Cache обязателен
+      ram_min_capacity_gb: 32
+      ram_min_latency_ns: "first_word_10ns"  # CL30 6000 = 10ns
+
+  # ═══════════════════ AI INFERENCE ═══════════════════
+  ai_inference_base:
+    domain: "ai_compute"
+    bottleneck: "gpu_vram"
+    bottleneck_reason: "VRAM — главный constraint. Модель не влезет → offload, падение скорости в 10×."
+    floors:
+      cpu_min_cores: 6
+      cpu_min_arch: "zen3_or_alder_lake"
+      ram_min_capacity_gb:
+        "7B": 32
+        "13B": 32
+        "32B": 64
+        "70B": 128
+      storage_min_capacity_gb: 2000
+      storage_sustained_write: false
+
+  # ═══════════════════ DATA ENGINEERING ═══════════════════
+  data_engineering_base:
+    domain: "data_engineering"
+    bottleneck: "ram_io"
+    bottleneck_reason: "Датасет должен влезать в RAM + I/O. CPU важен для трансформаций."
+    floors:
+      cpu_min_cores: 12
+      cpu_min_arch: "zen4_or_raptor_lake"
+      ram_min_capacity_gb:
+        "50GB": 64
+        "200GB": 128
+        "500GB": 256
+      gpu_min_vram_gb: 0            # GPU не требуется
+      storage_sustained_write: true
+      storage_min_capacity_gb: 2000
+
+  # ═══════════════════ SFF ═══════════════════
+  sff_compact_itx_portable:
+    domain: "gaming"
+    bottleneck: "volume"
+    bottleneck_reason: "Объём корпуса — физический constraint."
+    floors:
+      cpu_tdp_max_w: 120            # Охлаждение ограничено
+      gpu_max_length_mm: 280        # ITX-корпус
+      gpu_max_tdp_w: 220            # Тепловой бюджет SFF
+      ram_min_capacity_gb: 32
+
+  # ═══════════════════ DAW / AUDIO PRODUCTION ═══════════════════
+  daw_zero_dpc_latency:
+    domain: "audio_production"
+    bottleneck: "dpc_latency"
+    bottleneck_reason: "DPC Latency — корневой constraint. Драйверы, BIOS, чипсет определяют пригодность для аудио. Не CPU, не GPU, не RAM."
+    floors:
+      cpu_min_cores: 8
+      cpu_min_arch: "zen4_or_raptor_lake"
+      cpu_igpu_required: true       # dGPU запрещён (DPC-спайки + шум кулера)
+      ram_min_capacity_gb: 32
+      ram_min_speed: "ddr5_5200"
+      storage_min_capacity_gb: 1000
+      storage_type: "nvme_only"     # HDD запрещён (тональный шум шпинделя)
+      cooler_type: "air_only"       # AIO запрещён (тональный шум помпы)
+      psu_acoustic_class: "semi_passive"
+      mb_lan_preference: "Realtek"  # Realtek предпочтительнее Intel I225/I226 для DPC
+      mb_wifi: "forbidden"          # Wi-Fi создаёт DPC-спайки
+      mb_bluetooth: "forbidden"     # Bluetooth создаёт DPC-спайки
+      dpc_latency_target_us: 50

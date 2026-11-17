@@ -1,0 +1,112 @@
+# Domain Cross-Impact Matrix
+# ====================================================================
+# Назначение: декларативный source of truth — какие типы компонентов
+# ОБЯЗАНЫ участвовать в проверках соответствующих физических доменов.
+#
+# Использование:
+#   L3-симуляторы — enumeration: «дай все acoustic_emitter компоненты в сборке»
+#   L5-Gate — completeness check: «все ли emitter-компоненты имеют профили?»
+#   PR Guardian — валидация новых KB-записей на полноту доменных профилей
+#
+# MBSE Traceability:
+#   Эта матрица закрывает разрыв между Top-Down (физические домены → компоненты)
+#   и Bottom-Up (компоненты → правила). Каждый флаг = allocation отношения
+#   "компонент типа X ЯВЛЯЕТСЯ emitter/consumer/interface в домене Y".
+#
+# Изменения:
+#   2026-06-05 — v1.0: 10 типов компонентов, 5 доменов.
+#     Создана по результатам Root Cause Analysis инцидента WS-EMIRATES-001
+#     (PSU не был помечен как acoustic_emitter → тихая сборка получила
+#     active_low_noise PSU вместо semi_passive).
+# ====================================================================
+
+component_impacts:
+  cpu:
+    thermal_emitter: true
+    power_consumer: true
+    acoustic_emitter: false       # кремний не шумит — кулер проверяется отдельно
+    spatial_volume: true
+
+  gpu:
+    thermal_emitter: true
+    power_consumer: true
+    acoustic_emitter: true        # вентиляторы на кожухе — активный источник шума
+    spatial_volume: true
+
+  motherboard:
+    thermal_emitter: false        # VRM греется, но это пассивный элемент (радиатор)
+    power_consumer: true
+    acoustic_emitter: false       # пассивный элемент
+    spatial_volume: true
+
+  psu:
+    thermal_emitter: true         # КПД 90% → 10% в тепло. ОБЯЗАН участвовать в L3 Thermal.
+    power_provider: true
+    acoustic_emitter: true        # ← ИНЦИДЕНТ WS-EMIRATES-001: вентилятор PSU — активный источник шума
+    spatial_volume: true
+
+  memory:
+    thermal_emitter: true         # DDR5 греется (особенно XMP/EXPO)
+    power_consumer: true
+    acoustic_emitter: false
+    spatial_volume: false
+
+  storage_ssd:
+    thermal_emitter: true         # NVMe throttling при перегреве
+    power_consumer: true
+    acoustic_emitter: false
+    spatial_volume: false
+
+  storage_hdd:
+    thermal_emitter: true
+    power_consumer: true
+    acoustic_emitter: true        # шпиндель 7200 RPM = слышимый шум
+    spatial_volume: true
+
+  cooler_air:
+    thermal_interface: true       # отводит тепло от CPU
+    power_consumer: true          # вентилятор(ы)
+    acoustic_emitter: true        # основной источник шума в сборке
+    spatial_volume: true          # башня 155mm vs корпус 160mm → clearance check
+
+  cooler_liquid:
+    thermal_interface: true
+    power_consumer: true          # помпа + вентиляторы на радиаторе
+    acoustic_emitter: true        # помпа гудит, вентиляторы на радиаторе шумят
+    spatial_volume: true          # радиатор 240/280/360mm должен влезть в корпус
+
+  case:
+    thermal_interface: false      # не греется сам, но airflow определяет охлаждение
+    power_consumer: false
+    acoustic_emitter: false       # не шумит сам, но sound-dampening снижает шум других компонентов
+    spatial_volume: true          # ОБЯЗАН вместить все компоненты (L1 Constraint)
+
+  audio_interface:
+    thermal_emitter: false        # USB Bus Power (2.5-5W) — negligible heat
+    power_consumer: true          # Питание от USB или внешнего БП
+    acoustic_emitter: false       # Пассивный элемент
+    spatial_volume: false
+    dpc_contributor: false        # НЕ создаёт DPC — потребляет готовый аудиопоток
+    note: "Аудиоинтерфейс — внешнее устройство. Не интегрируется в L2 Constraint (structural). Влияет на L3 Behavior через driver quality и ASIO buffer."
+
+# ====================================================================
+# Completeness Rules — что делать, если emitter-компонент не имеет профиля
+# ====================================================================
+completeness_rules:
+  acoustic_emitter:
+    # Если компонент помечен acoustic_emitter: true, но в KB-записи
+    # отсутствует поле acoustic_profile → назначается default.
+    default_profile: "active_standard"   # худший класс (rank 3) — презумпция шумности
+    severity: "WARN"                     # не BLOCK: данных нет, но не физическая несовместимость
+    message: "KB entry for {component_id} missing acoustic_profile — assigned worst-case '{default}' (rank 3). Update KB entry with actual acoustic data."
+
+  thermal_emitter:
+    default_tdp_class: "unknown"
+    severity: "WARN"
+    message: "KB entry for {component_id} missing thermal profile — assigned 'unknown'. Thermal simulation may be incomplete."
+
+  spatial_volume:
+    # Если spatial_volume: true, но нет габаритов в specs → BLOCK (нельзя проверить clearance)
+    default_dimensions: null
+    severity: "BLOCK"
+    message: "KB entry for {component_id} missing dimensions — spatial clearance cannot be verified."

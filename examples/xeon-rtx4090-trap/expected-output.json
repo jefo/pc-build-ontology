@@ -1,0 +1,175 @@
+{
+  "structural_clearance": {
+    "is_compatible": false,
+    "failures": [
+      "GPU (348mm) не влезает в корпус (макс: 300mm, нужен зазор 10mm). Дефицит: 58mm.",
+      "Кулер (160mm) не влезает в корпус (макс: 160mm, нужен зазор 5mm). Дефицит: 5mm."
+    ],
+    "tolerances": {
+      "gpu_clearance_mm": -48,
+      "cooler_clearance_mm": 0
+    }
+  },
+  "envelope_collision_3d": {
+    "is_compatible": true,
+    "conflicts": [],
+    "tolerances": {
+      "ram_collision_gap_mm": 9
+    }
+  },
+  "pcie_topology": {
+    "gpu_effective_pcie_lanes": 16,
+    "gpu_pcie_gen_effective": 3,
+    "gpu_pcie_gen_original": 3,
+    "slot_pcie_gen": 4,
+    "generation_degraded": false,
+    "effective_bandwidth_gbs": 15.8,
+    "bandwidth_warning": "BANDWIDTH WARNING: Effective PCIe bandwidth 15.8 GB/s (Gen3 ×16) ниже рекомендованного уровня для 1440p+ гейминга (20.0 GB/s). Возможны микрофризы при потоковой подгрузке текстур.",
+    "intent": "",
+    "offload_bandwidth_gbs": null,
+    "storage_sustained_write_compliant": true,
+    "dram_warning": null,
+    "warnings": [
+      "BANDWIDTH WARNING: Effective PCIe bandwidth 15.8 GB/s (Gen3 ×16) ниже рекомендованного уровня для 1440p+ гейминга (20.0 GB/s). Возможны микрофризы при потоковой подгрузке текстур."
+    ],
+    "original_gpu_lanes": 16,
+    "lane_loss": 0
+  },
+  "thermal_profile": {
+    "ambient_temp_C": 25,
+    "case_delta_C": 8.0,
+    "case_airflow_class": "normal",
+    "case_exhaust_capacity_W": 300,
+    "total_heat_generation_W": 409.5,
+    "thermal_soak_active": true,
+    "thermal_soak_penalty_C": 5.5,
+    "internal_case_ambient_C": 52.9,
+    "predicted_cpu_temp_C": 83.2,
+    "predicted_gpu_temp_C": 33.9,
+    "cpu_thermal_state": "T_Hot",
+    "gpu_thermal_state": "T_Cool",
+    "is_mutual_heating_active": true
+  },
+  "power_state": {
+    "gaming_power_W": 406,
+    "full_load_power_W": 505,
+    "psu_headroom_factor": 0.89,
+    "gaming_headroom_factor": 1.11,
+    "atx_3_spec_required": true,
+    "atx_3_spec_satisfied": false,
+    "status": "BLOCK",
+    "messages": [
+      "BLOCK: БП 450W недостаточен. Full load: 505W, нужно минимум 556W.",
+      "BLOCK: GPU 320W требует БП ATX 3.0/3.1 (защита от transient spikes). Текущий: ATX2.4."
+    ]
+  },
+  "acoustic_class": {
+    "predicted_acoustic_class_idle": "A2",
+    "predicted_acoustic_class_load": "A4",
+    "high_dpc_latency_risk": false,
+    "is_compliant": false,
+    "warnings": [
+      "ACOUSTIC: Класс шума A4 превышает ограничение moderate (макс: A3)."
+    ]
+  },
+  "profile_conflicts": {
+    "profile_validation_status": "PASS",
+    "profile_action": "proceed",
+    "optimal_matches": [
+      {
+        "component": "nvidia-rtx-4090",
+        "profile": "halo_4k_path_tracing",
+        "matched_intents": [
+          "aaa_4k_ultra"
+        ],
+        "steel_man": "4K-гейминг с трассировкой лучей на максимальных настройках. БП ATX 3.0 от 850W, корпус с хорошим продувом."
+      }
+    ],
+    "blocks": [],
+    "warnings": [],
+    "summary": {
+      "optimal_count": 1,
+      "block_count": 0,
+      "warn_count": 0
+    }
+  },
+  "physical_constraints": {
+    "pass": false,
+    "checks": [
+      {
+        "component": "gpu",
+        "check": "length",
+        "status": "FAIL",
+        "detail": "GPU length 348mm > 320mm limit"
+      },
+      {
+        "component": "gpu",
+        "check": "thickness",
+        "status": "FAIL",
+        "detail": "GPU thickness 3.5 slots > 3.0 slots limit"
+      },
+      {
+        "component": "cooler",
+        "check": "height",
+        "status": "FAIL",
+        "detail": "Cooler height 160mm > 155mm limit"
+      }
+    ],
+    "blocking_failures": 3,
+    "warnings": 0
+  },
+  "mvs_allocation": {
+    "mvs_status": "FAIL",
+    "tier_label": "Средний сегмент (90–150K ₽)",
+    "summary": "Тир: Средний сегмент (90–150K ₽) (90,000–150,000₽). Нарушений: 3.",
+    "violations": [
+      {
+        "check": "m2_slots",
+        "severity": "WARN",
+        "message": "MVS: плата имеет 1 M.2 слотов, тир требует ≥2. Ограничено расширение хранилища.",
+        "required": "≥2",
+        "actual": "1"
+      },
+      {
+        "check": "pcie_gen",
+        "severity": "BLOCK",
+        "message": "MVS: чипсет X99 поддерживает PCIe Gen4, тир требует Gen5. Карты Gen5 будут работать на пониженной скорости.",
+        "required": "Gen5",
+        "actual": "Gen4"
+      },
+      {
+        "check": "vrm_tier",
+        "severity": "WARN",
+        "message": "MVS: чипсет X99 имеет VRM уровня «basic_stable», тир требует «sweet_spot_stable». Под sustained нагрузкой возможен троттлинг.",
+        "required": "sweet_spot_stable",
+        "actual": "basic_stable"
+      }
+    ]
+  },
+  "component_floor": {
+    "floor_status": "PASS",
+    "summary": "Floor check для aaa_gaming_base (бутылка: gpu). Нарушений: 0.",
+    "violations": [],
+    "intent_id": "aaa_gaming_base",
+    "bottleneck": "gpu"
+  },
+  "l5_validation": {
+    "validation_status": "FAIL",
+    "action_required": "rollback",
+    "failed_check_ids": [
+      "STRUCTURAL: Компоненты физически несовместимы.",
+      "POWER: BLOCK: БП 450W недостаточен. Full load: 505W, нужно минимум 556W.",
+      "MVS: MVS: чипсет X99 поддерживает PCIe Gen4, тир требует Gen5. Карты Gen5 будут работать на пониженной скорости.",
+      "BUDGET: 132,000₽ превышает потолок 120,000₽ на 12,000₽."
+    ],
+    "warnings": [
+      "THERMAL: CPU 83.2°C — близко к пределу.",
+      "THERMAL SOAK: Корпус (normal) не справляется с отводом 410W тепла (exhaust capacity: 300W). При sustained нагрузке температуры будут расти (+5.5°C penalty).",
+      "ACOUSTIC: Класс шума A4 превышает ограничение moderate (макс: A3).",
+      "BANDWIDTH WARNING: Effective PCIe bandwidth 15.8 GB/s (Gen3 ×16) ниже рекомендованного уровня для 1440p+ гейминга (20.0 GB/s). Возможны микрофризы при потоковой подгрузке текстур.",
+      "MVS: MVS: плата имеет 1 M.2 слотов, тир требует ≥2. Ограничено расширение хранилища.",
+      "MVS: MVS: чипсет X99 имеет VRM уровня «basic_stable», тир требует «sweet_spot_stable». Под sustained нагрузкой возможен троттлинг."
+    ],
+    "summary": "Критические ошибки. Необходим rollback и пересмотр."
+  }
+}

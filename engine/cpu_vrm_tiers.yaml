@@ -1,0 +1,34 @@
+# PCBOv2: CPU TDP → MB VRM floor.
+# Используется Skill 13 (validate_cpu_vrm.py).
+# При выходе новых CPU-архитектур с другими TDP-классами — править здесь.
+
+meta:
+  schema_version: "1.0"
+  description: "CPU TDP → минимальный VRM tier материнской платы."
+  last_updated: "2026-06-04"
+
+# Порядок записей важен: первый подходящий диапазон побеждает.
+tdp_to_vrm:
+  - tdp_min: 0
+    tdp_max: 65
+    min_vrm_tier: "basic_stable"
+    label: "≤65W"
+    rationale: "4-фазный VRM без радиатора. Ryzen 5, Core i3."
+
+  - tdp_min: 66
+    tdp_max: 120
+    min_vrm_tier: "sweet_spot_stable"
+    label: "66–120W"
+    rationale: "8-фазный VRM с радиатором. Ryzen 7, Core i5/i7."
+
+  - tdp_min: 121
+    tdp_max: 170
+    min_vrm_tier: "overclock_ready"
+    label: "121–170W"
+    rationale: "12-фазный VRM + удвоители. Ryzen 9, Core i9."
+
+  - tdp_min: 171
+    tdp_max: 999
+    min_vrm_tier: "workstation_grade"
+    label: "171W+"
+    rationale: "16-фазный VRM серверного класса. Threadripper, Xeon W."

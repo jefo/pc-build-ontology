@@ -1,0 +1,55 @@
+# PCBOv2: GPU PCIe class → минимальный слот MB.
+# Используется Skill 14 (validate_gpu_pcie.py).
+# При выходе PCIe 6.0 или новых карт с нестандартными lanes — править здесь.
+
+meta:
+  schema_version: "1.0"
+  description: "GPU PCIe-класс → минимальные требования к слоту материнской платы."
+  last_updated: "2026-06-04"
+
+# Порядок: от узких карт (x8, риск бутылки) к широким (x16, запас).
+# Ключ gpu_class: "Gen{gen}_x{lanes}"
+gpu_pcie_slot_requirements:
+  - gpu_class: "Gen3_x8"
+    min_mb_gen: 3
+    min_mb_effective_bw_gbs: 7.9
+    rationale: "Узкая старая карта. Gen3×8 = 7.9 GB/s. Даже Gen3-слота хватит."
+
+  - gpu_class: "Gen4_x8"
+    min_mb_gen: 4
+    min_mb_effective_bw_gbs: 15.8
+    rationale: "RX 7600 / RTX 4060. x8 Gen4 карта в Gen3-слоте = 7.9 GB/s → CLIFF_DROP. Нужен Gen4-слот."
+
+  - gpu_class: "Gen5_x8"
+    min_mb_gen: 4
+    min_mb_effective_bw_gbs: 15.8
+    rationale: "B580 / RTX 5060. Gen5×8 = 31.5 GB/s. В Gen4-слоте ×8 = 15.8 — на грани, но допустимо."
+
+  - gpu_class: "Gen3_x16"
+    min_mb_gen: 3
+    min_mb_effective_bw_gbs: 15.8
+    rationale: "Старая карта ×16. Игры не упираются в Gen3×16 (15.8 GB/s)."
+
+  - gpu_class: "Gen4_x16"
+    min_mb_gen: 3
+    min_mb_effective_bw_gbs: 15.8
+    rationale: "RTX 3090 / RX 6900. ×16 всегда с запасом. Даже Gen3×16 = 15.8 GB/s — FPS не роняет."
+
+  - gpu_class: "Gen5_x16"
+    min_mb_gen: 3
+    min_mb_effective_bw_gbs: 15.8
+    rationale: "RTX 5090 / RX 9070 XT. ×16 избыточно. Gen3×16 = 15.8 GB/s — игровой FPS не страдает."
+
+# AI-интенты поднимают min_mb_gen до Gen5 (offload bandwidth).
+ai_modifier:
+  enabled: true
+  force_mb_gen: 5
+  keywords:
+    - "ai_inference"
+    - "ai_compute"
+    - "llm"
+    - "inference"
+    - "training"
+    - "offload"
+    - "cuda"
+    - "tensor"

@@ -1,0 +1,156 @@
+{
+  "structural_clearance": {
+    "is_compatible": true,
+    "failures": [],
+    "tolerances": {
+      "gpu_clearance_mm": 110,
+      "cooler_clearance_mm": 10
+    }
+  },
+  "envelope_collision_3d": {
+    "is_compatible": true,
+    "conflicts": [],
+    "tolerances": {
+      "ram_collision_gap_mm": 9
+    }
+  },
+  "pcie_topology": {
+    "gpu_effective_pcie_lanes": 8,
+    "gpu_pcie_gen_effective": 4,
+    "gpu_pcie_gen_original": 4,
+    "slot_pcie_gen": 5,
+    "generation_degraded": false,
+    "effective_bandwidth_gbs": 15.8,
+    "bandwidth_warning": "BANDWIDTH WARNING: Effective PCIe bandwidth 15.8 GB/s (Gen4 ×8) ниже рекомендованного уровня для 1440p+ гейминга (20.0 GB/s). Возможны микрофризы при потоковой подгрузке текстур.",
+    "intent": "",
+    "offload_bandwidth_gbs": null,
+    "storage_sustained_write_compliant": true,
+    "dram_warning": null,
+    "warnings": [
+      "BANDWIDTH WARNING: Effective PCIe bandwidth 15.8 GB/s (Gen4 ×8) ниже рекомендованного уровня для 1440p+ гейминга (20.0 GB/s). Возможны микрофризы при потоковой подгрузке текстур."
+    ],
+    "original_gpu_lanes": 8,
+    "lane_loss": 0
+  },
+  "thermal_profile": {
+    "ambient_temp_C": 25,
+    "case_delta_C": 8.0,
+    "case_airflow_class": "high",
+    "case_exhaust_capacity_W": 300,
+    "total_heat_generation_W": 244.5,
+    "thermal_soak_active": false,
+    "thermal_soak_penalty_C": 0.0,
+    "internal_case_ambient_C": 33.0,
+    "predicted_cpu_temp_C": 57.0,
+    "predicted_gpu_temp_C": 30.6,
+    "cpu_thermal_state": "T_Warm",
+    "gpu_thermal_state": "T_Cool",
+    "is_mutual_heating_active": false
+  },
+  "power_state": {
+    "gaming_power_W": 258,
+    "full_load_power_W": 335,
+    "psu_headroom_factor": 1.94,
+    "gaming_headroom_factor": 2.51,
+    "atx_3_spec_required": false,
+    "atx_3_spec_satisfied": true,
+    "status": "PASS",
+    "messages": [
+      "PASS: Энергобаланс в норме."
+    ]
+  },
+  "acoustic_class": {
+    "predicted_acoustic_class_idle": "A1",
+    "predicted_acoustic_class_load": "A2",
+    "high_dpc_latency_risk": false,
+    "is_compliant": true,
+    "warnings": []
+  },
+  "profile_conflicts": {
+    "profile_validation_status": "PASS",
+    "profile_action": "proceed",
+    "optimal_matches": [
+      {
+        "component": "amd-rx-7600",
+        "profile": "mainstream_efficiency_tgp_150w",
+        "matched_intents": [
+          "esports_1080p_240hz"
+        ],
+        "steel_man": "Массовые игровые ПК среднего класса: 1080p/1440p. БП 500–550W. Минимальные требования к вентиляции, низкий шум."
+      }
+    ],
+    "blocks": [],
+    "warnings": [],
+    "summary": {
+      "optimal_count": 1,
+      "block_count": 0,
+      "warn_count": 0
+    }
+  },
+  "physical_constraints": {
+    "pass": true,
+    "checks": [
+      {
+        "component": "gpu",
+        "check": "length",
+        "status": "PASS",
+        "detail": "240mm ≤ 350mm"
+      },
+      {
+        "component": "gpu",
+        "check": "thickness",
+        "status": "PASS",
+        "detail": "2.0 slots ≤ 2.5 slots"
+      },
+      {
+        "component": "cooler",
+        "check": "height",
+        "status": "PASS",
+        "detail": "155mm ≤ 165mm"
+      }
+    ],
+    "blocking_failures": 0,
+    "warnings": 0
+  },
+  "mvs_allocation": {
+    "mvs_status": "PASS",
+    "tier_label": "Средний сегмент (90–150K ₽)",
+    "summary": "Тир: Средний сегмент (90–150K ₽) (90,000–150,000₽). Нарушений: 0.",
+    "violations": []
+  },
+  "cpu_vrm": {
+    "cpu_vrm_status": "PASS",
+    "summary": "CPU 120W (требует ≥sweet_spot_stable) → MB B650E (sweet_spot_stable): совместимо.",
+    "violations": [],
+    "cpu_tdp_w": 120,
+    "required_vrm": "sweet_spot_stable",
+    "actual_vrm": "sweet_spot_stable"
+  },
+  "gpu_pcie": {
+    "gpu_pcie_status": "PASS",
+    "summary": "GPU Gen4_x8 → MB B650E (Gen5-слот): совместимо.",
+    "violations": [],
+    "gpu_class": "Gen4_x8",
+    "gpu_pcie_gen": 4,
+    "gpu_pcie_lanes": 8,
+    "required_mb_gen": 4,
+    "actual_mb_gen": 5,
+    "ai_modifier": false
+  },
+  "component_floor": {
+    "floor_status": "PASS",
+    "summary": "Floor check для esports_competitive_360hz (бутылка: cpu). Нарушений: 0.",
+    "violations": [],
+    "intent_id": "esports_competitive_360hz",
+    "bottleneck": "cpu"
+  },
+  "l5_validation": {
+    "validation_status": "PASS_WITH_WARNINGS",
+    "action_required": "proceed_to_document",
+    "failed_check_ids": [],
+    "warnings": [
+      "BANDWIDTH WARNING: Effective PCIe bandwidth 15.8 GB/s (Gen4 ×8) ниже рекомендованного уровня для 1440p+ гейминга (20.0 GB/s). Возможны микрофризы при потоковой подгрузке текстур."
+    ],
+    "summary": "Есть предупреждения. Сборка допустима, но с оговорками."
+  }
+}

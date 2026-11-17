@@ -1,0 +1,153 @@
+# PCBOv2: Chipset Profiles — единый источник истины.
+# Используется Skills 2, 11, 13, 14.
+# При выходе новых чипсетов — добавить запись сюда. Код не менять.
+
+# schema_version меняется при изменении структуры (не данных).
+meta:
+  schema_version: "1.0"
+  description: "Чипсет → PCIe gen, VRM tier, M.2 slots range. Единый источник для всех валидаторов."
+  last_updated: "2026-06-04"
+
+chipsets:
+  # ── AM5 ──
+  B650:
+    pcie_gen: 4
+    ram_slots_range: [2, 4]
+    m2_slots_range: [1, 3]
+    vrm_tier: "basic_stable"
+    bifurcation: true       # крадёт линии GPU при 2+ M.2
+
+  B650M:
+    pcie_gen: 4
+    ram_slots_range: [2, 4]
+    m2_slots_range: [1, 2]
+    vrm_tier: "basic_stable"
+    bifurcation: true
+
+  B650E:
+    pcie_gen: 5
+    ram_slots_range: [4]
+    m2_slots_range: [2, 3]
+    vrm_tier: "sweet_spot_stable"
+    bifurcation: false
+
+  B850:
+    pcie_gen: 5
+    ram_slots_range: [4]
+    m2_slots_range: [2, 3]
+    vrm_tier: "sweet_spot_stable"
+    bifurcation: false
+
+  B850M:
+    pcie_gen: 5
+    ram_slots_range: [4]
+    m2_slots_range: [2, 3]
+    vrm_tier: "sweet_spot_stable"
+    bifurcation: false
+
+  X670:
+    pcie_gen: 5
+    ram_slots_range: [4]
+    m2_slots_range: [3, 4]
+    vrm_tier: "overclock_ready"
+    bifurcation: false
+
+  X670E:
+    pcie_gen: 5
+    ram_slots_range: [4]
+    m2_slots_range: [3, 4]
+    vrm_tier: "overclock_ready"
+    bifurcation: false
+
+  X870:
+    pcie_gen: 5
+    ram_slots_range: [4]
+    m2_slots_range: [3, 4]
+    vrm_tier: "overclock_ready"
+    bifurcation: false
+
+  X870E:
+    pcie_gen: 5
+    ram_slots_range: [4]
+    m2_slots_range: [4]
+    vrm_tier: "workstation_grade"
+    bifurcation: false
+
+  # ── Intel LGA1700 ──
+  Z790:
+    pcie_gen: 5
+    ram_slots_range: [4]
+    m2_slots_range: [3, 4]
+    vrm_tier: "overclock_ready"
+    bifurcation: false
+
+  Z690:
+    pcie_gen: 5
+    ram_slots_range: [4]
+    m2_slots_range: [3, 4]
+    vrm_tier: "overclock_ready"
+    bifurcation: false
+
+  B760:
+    pcie_gen: 4
+    ram_slots_range: [2, 4]
+    m2_slots_range: [1, 2]
+    vrm_tier: "basic_stable"
+    bifurcation: true
+
+  B760M:
+    pcie_gen: 4
+    ram_slots_range: [2, 4]
+    m2_slots_range: [1, 2]
+    vrm_tier: "basic_stable"
+    bifurcation: true
+
+  B660:
+    pcie_gen: 4
+    ram_slots_range: [2, 4]
+    m2_slots_range: [1, 2]
+    vrm_tier: "basic_stable"
+    bifurcation: true
+
+  B660M:
+    pcie_gen: 4
+    ram_slots_range: [2, 4]
+    m2_slots_range: [1, 2]
+    vrm_tier: "basic_stable"
+    bifurcation: true
+
+  H610:
+    pcie_gen: 4
+    ram_slots_range: [2]
+    m2_slots_range: [1]
+    vrm_tier: "basic_stable"
+    bifurcation: true
+
+  H670:
+    pcie_gen: 4
+    ram_slots_range: [2, 4]
+    m2_slots_range: [1, 2]
+    vrm_tier: "basic_stable"
+    bifurcation: true
+
+  H770:
+    pcie_gen: 4
+    ram_slots_range: [2, 4]
+    m2_slots_range: [1, 2]
+    vrm_tier: "basic_stable"
+    bifurcation: false
+
+  # ── Intel LGA1851 ──
+  Z890:
+    pcie_gen: 5
+    ram_slots_range: [4]
+    m2_slots_range: [3, 4]
+    vrm_tier: "overclock_ready"
+    bifurcation: false
+
+# Порядок — от худшего к лучшему. Используется для сравнения VRM.
+vrm_tier_rank:
+  basic_stable: 1
+  sweet_spot_stable: 2
+  overclock_ready: 3
+  workstation_grade: 4

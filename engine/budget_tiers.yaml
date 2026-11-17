@@ -1,0 +1,141 @@
+# PCBOv2 Budget Tiers — Minimum Viable Specification (MVS)
+# v3.0 — MVS теперь проверяет CPU и RAM (не только MB).
+# Tier matching удалён. Заменён на физические валидаторы:
+#   - CPU_VRM: TDP → VRM tier (Skill 13)
+#   - GPU_PCIe: lanes class → slot gen (Skill 14)
+#   - Component Floor: intent-based bottleneck minimums (Skill 15)
+#
+# ⚠️ Temporal anchoring: recalibrate when reference prices shift ±15%.
+# Last recalibration: 2026-06-04. Next check: 2026-07-04.
+
+meta:
+  schema_version: "2.1"
+  reference_date: "2026-06-04"
+  market_condition: "sanctions_rf_june_2026"
+  currency: "RUB"
+  market: "Россия, санкционные цены"
+  next_recalibration_check: "2026-07-04"
+
+  recalibration_triggers:
+    price_shift_threshold_pct: 15
+    reference_components:
+      gpu_mid: "nvidia-rtx-5070"
+      gpu_high: "nvidia-rtx-5080"
+      cpu_mid: "amd-ryzen-7-7700"
+      mb_mid: "msi-b650-tomahawk"
+    reference_prices_at_calibration:
+      nvidia-rtx-5070: 72000
+      nvidia-rtx-5080: 125000
+      amd-ryzen-7-7700: 16500
+      msi-b650-tomahawk: 24500
+
+budget_tiers:
+  sub_entry_30k_50k:
+    label: "Суб-бюджетная сборка (30–50K ₽)"
+    budget_min: 30000
+    budget_max: 50000
+    mb_requirements:
+      min_m2_slots: 1
+      min_pcie_gen: 3
+      networking: "1G"
+      vrm_tier: "basic_stable"
+    cpu_requirements:
+      min_cores: 4
+      min_arch_gen: "zen3_or_alder_lake"
+      max_tdp_w: 65
+    ram_requirements:
+      min_capacity_gb: 16
+      min_speed: "ddr5_4800"
+    allocation:
+      mb_budget_share_min: 0.06
+      mb_budget_share_max: 0.18
+
+  budget_entry_50k_90k:
+    label: "Бюджетная сборка (50–90K ₽)"
+    budget_min: 50000
+    budget_max: 90000
+    mb_requirements:
+      min_m2_slots: 1
+      min_pcie_gen: 4
+      networking: "1G OR Wi-Fi"
+      vrm_tier: "basic_stable"
+    cpu_requirements:
+      min_cores: 4
+      min_arch_gen: "zen3_or_alder_lake"
+      max_tdp_w: 120
+    ram_requirements:
+      min_capacity_gb: 16
+      min_speed: "ddr5_5200"
+    allocation:
+      mb_budget_share_min: 0.08
+      mb_budget_share_max: 0.15
+
+  mid_range_90k_150k:
+    label: "Средний сегмент (90–150K ₽)"
+    budget_min: 90000
+    budget_max: 150000
+    mb_requirements:
+      min_m2_slots: 2
+      min_pcie_gen: 5
+      networking: "2.5G OR Wi-Fi 6"
+      vrm_tier: "sweet_spot_stable"
+    cpu_requirements:
+      min_cores: 6
+      min_arch_gen: "zen4_or_raptor_lake"
+      max_tdp_w: 120
+    ram_requirements:
+      min_capacity_gb: 32
+      min_speed: "ddr5_5600"
+    allocation:
+      mb_budget_share_min: 0.10
+      mb_budget_share_max: 0.20
+
+  enthusiast_150k_250k:
+    label: "Энтузиаст (150–250K ₽)"
+    budget_min: 150000
+    budget_max: 250000
+    mb_requirements:
+      min_m2_slots: 3
+      min_pcie_gen: 5
+      networking: "2.5G AND Wi-Fi 6E"
+      vrm_tier: "overclock_ready"
+    cpu_requirements:
+      min_cores: 8
+      min_arch_gen: "zen4_or_raptor_lake"
+      max_tdp_w: 170
+    ram_requirements:
+      min_capacity_gb: 32
+      min_speed: "ddr5_6000"
+    allocation:
+      mb_budget_share_min: 0.12
+      mb_budget_share_max: 0.22
+
+  workstation_unlimited:
+    label: "Рабочая станция (250K+)"
+    budget_min: 250000
+    budget_max: 9999999
+    mb_requirements:
+      min_m2_slots: 3
+      min_pcie_gen: 5
+      networking: "5G OR 10G"
+      vrm_tier: "workstation_grade"
+    cpu_requirements:
+      min_cores: 12
+      min_arch_gen: "zen4_or_raptor_lake"
+      max_tdp_w: 999
+    ram_requirements:
+      min_capacity_gb: 64
+      min_speed: "ddr5_5600"
+    allocation:
+      mb_budget_share_min: 0.10
+      mb_budget_share_max: 0.25
+
+vrm_tiers:
+  basic_stable:
+    description: "Достаточно для стоковых CPU до 105W"
+  sweet_spot_stable:
+    description: "VRM с запасом, стабилен под sustained нагрузкой"
+  overclock_ready:
+    description: "Удвоители/нативные фазы, готов к разгону"
+  workstation_grade:
+    description: "Серверный класс VRM, 24/7 sustained load"
